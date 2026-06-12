@@ -2,9 +2,9 @@
 
 ## Información del Estudiante
 
-- **Nombre:** [Tu nombre completo aquí]
-- **Carrera:** [Tu carrera]
-- **Fecha de inicio:** [Fecha]
+- **Nombre:** Ariel Rosero Toscano
+- **Carrera:** Tecnología en desarrollo de software
+- **Fecha de inicio:** viernes jun 2026
 
 ---
 
