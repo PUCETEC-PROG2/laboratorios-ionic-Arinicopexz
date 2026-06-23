@@ -5,18 +5,26 @@ import RepoItem from "../components/Repoitem";
 import { Repository } from '../Interfaces/Repository';
 import { fetchRepositories } from '../services/GithubService';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { IonText } from '@ionic/react';
 
 const Tab1: React.FC = () => {
   const [repositoryList, setRepositoryList] = React.useState<Repository[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = React.useState("");
 
   const loadRepos = async () => {
-    setLoading(true)
-    const repos = await fetchRepositories();
-    setRepositoryList(repos);
-    setLoading(false);
-  }
-
+    setLoading(true);
+    fetchRepositories().then((reposData) => {
+      setRepositoryList(reposData);
+    }).catch((error) => {
+      console.error("Error al cargar repositorios", error);
+      setErrorMsg("Error al cargar repositorios" + error);
+    }).finally(() => {
+      setLoading(false);
+    });
+  };
+    /*const repos = await fetchRepositories();
+    setRepositoryList(repos);*/
   useIonViewWillEnter(() => {
     loadRepos();
   });
@@ -28,7 +36,7 @@ const Tab1: React.FC = () => {
           <IonTitle>Repositorios</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen className="ion-padding">
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Repositorios</IonTitle>
@@ -41,6 +49,11 @@ const Tab1: React.FC = () => {
           ))}
         </IonList>
           {loading && <LoadingSpinner />}
+          {errorMsg !== "" && (
+            <IonText color="danger">
+              <p>{errorMsg}</p>
+            </IonText>
+          )}
       </IonContent>
     </IonPage>
   );
