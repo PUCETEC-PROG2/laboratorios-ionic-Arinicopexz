@@ -47,3 +47,17 @@ export const fetchUserInfo = async (): Promise<GithubUser | null> => {
     }
 
 }
+
+export const createRepository = async (name: string, description: string, isPrivate: boolean): Promise<Repository> => {
+    try {
+        const response = await apiClient.post("user/repos", {
+            name: name,
+            description: description,
+            private: isPrivate
+        });
+        return response.data as Repository;
+    } catch (error) {
+        console.error("Error creando repositorio:", error);
+        throw new Error(`${(error as Error).message}`);
+    }
+}
