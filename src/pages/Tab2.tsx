@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   IonContent,
   IonHeader,
@@ -8,7 +9,7 @@ import {
   IonToolbar,
   IonTextarea,
   IonButton,
-  useIonToast // 1. NUEVO: Importa la herramienta para mensajes flotantes
+  useIonToast
 } from '@ionic/react';
 import { createRepository } from '../services/GithubService';
 
@@ -18,16 +19,15 @@ const Tab2: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   
-  // 2. NUEVO: Preparam la función que mostrará el mensaje en pantalla
   const [presentToast] = useIonToast();
+  const history = useHistory();
 
   const handleCrearRepositorio = async () => {
     if (name.trim() === '') {
-      // 3. :presentToast
       presentToast({
         message: 'Por favor, ingresa el nombre del repositorio.',
         duration: 2000,
-        color: 'warning' // Color amarillo de advertencia
+        color: 'warning'
       });
       return; 
     }
@@ -35,28 +35,27 @@ const Tab2: React.FC = () => {
     try {
       await createRepository(name, description, false);
       
-      // 4. REEMPLAZO: Mensaje de éxito nativo
       presentToast({
         message: '¡Repositorio creado con éxito!',
         duration: 2000,
-        color: 'success' // Color verde de éxito
+        color: 'success'
       });
       
       setName('');
       setDescription('');
 
+      history.push('/tab1');
+
     } catch (error) {
-      // 5. REEMPLAZO: Mensaje de error nativo
       presentToast({
         message: 'Hubo un error al crear el repositorio. Intenta con otro nombre.',
-        duration: 3000, // Lo dejamos 3 segundos para que alcance a leer
-        color: 'danger' // Color rojo de error
+        duration: 3000,
+        color: 'danger'
       });
     }
   };
 
   return (
-    //  ...
     <IonPage>
       <IonHeader>
         <IonToolbar>
